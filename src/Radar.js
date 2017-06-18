@@ -18,6 +18,7 @@ type Props = {
   height: number,
   padding: number,
   domainMax: number,
+  colors?: {},
   style?: {},
   onHover?: (point: RadarPoint | null) => void,
   highlighted: ?RadarPoint,
@@ -59,6 +60,7 @@ export default function Radar(props: Props) {
     domainMax,
     style,
     onHover,
+    colors,
     highlighted,
   } = props;
   const {allPoints, scales, offsetAngles, radius, voronoiDiagram} = convertData(
@@ -69,10 +71,11 @@ export default function Radar(props: Props) {
 
   const backgroundScale = scales[data.variables[0].key];
 
-  const colors = {};
-  forEachArray(allPoints, ({setKey}, idx) => {
-    colors[setKey] = schemeCategory10[idx];
-  });
+  if (colors === {}) {
+    forEachArray(allPoints, ({setKey}, idx) => {
+      colors[setKey] = schemeCategory10[idx];
+    });
+  }
 
   const [highlightedPoints, regularPoints] = _.partition(
     allPoints,
